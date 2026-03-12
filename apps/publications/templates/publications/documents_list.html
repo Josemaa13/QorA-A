@@ -1,0 +1,38 @@
+<div class="documents-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+    {% for document in documents %}
+      <div class="card document-card">
+        
+        <h3 class="card-title" style="word-break: break-word;">
+            {{ document.title }}
+        </h3>
+        
+        <div class="content-wrapper" style="margin-top: 1rem;">
+            <!-- Content Preview -->
+            <div class="text-content">
+                <div class="card-meta" style="font-size: 0.85em; color: #666; margin-bottom: 1rem;">
+                    <span>Uploaded by <a href="{% url 'profile' document.user.username %}" class="highlight-link">@{{ document.user.username }}</a></span>
+                    <br>
+                    <span>{{ document.timestamp|date:"M d, Y" }}</span>
+                    {% if document.is_public %}
+                    <span class="badge" style="background: var(--primary-color); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-left: 0.5rem;">Public</span>
+                    {% else %}
+                    <span class="badge" style="background: #999; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-left: 0.5rem;">Private</span>
+                    {% endif %}
+                </div>
+
+                <div class="document-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    {% if document.file %}
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">View</a>
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-outline" download>Download</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+       
+      </div>
+    {% empty %}
+        <div class="empty-state">
+            {{ empty_message|default:"No documents found." }}
+        </div>
+    {% endfor %}
+</div>

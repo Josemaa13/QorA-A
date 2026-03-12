@@ -10,10 +10,10 @@
     <!-- Left Column: Activity Feed -->
     <div class="main-column">
         <div class="page-header">
-            <h1>Questions from {{ profile_user.username }}</h1>
+            <h1>Documents from {{ profile_user.username }}</h1>
         </div>
 
-        {% include 'publications/questions_list.html' with questions=questions empty_message="This user hasn't asked any questions yet." %}
+        {% include 'publications/documents_list.html' with documents=documents empty_message="This user hasn't uploaded any documents yet." %}
     </div>
 
     <!-- Right Column: User Info Sidebar -->

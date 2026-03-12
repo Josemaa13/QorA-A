@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Upload a Document - QorA {% endblock %}
+
+{% block content %}
+<div class="form-container-sm">
+    <div class="card">
+        <h1 class="form-header">
+            Upload a Document
+        </h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="form-error-msg">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label for="{{ form.file.id_for_label }}" class="form-label">File</label>
+                {{ form.file }}
+                {% if form.file.errors %}
+                    <div class="form-error-msg">
+                        {{ form.file.errors }}
+                    </div>
+                {% endif %}
+                <small class="text-muted" style="display:block; margin-top:0.5rem;">Max size: 5MB. Formats: PDF, PNG, JPG.</small>
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem; margin-bottom: 2rem;">
+                <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    {{ form.is_public }}
+                    <span style="font-weight: normal;">Make this document public</span>
+                </label>
+                {% if form.is_public.errors %}
+                    <div class="form-error-msg">
+                        {{ form.is_public.errors }}
+                    </div>
+                {% endif %}
+                <small class="text-muted" style="display:block; margin-top:0.25rem;">Public documents will appear in your followers' feeds.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Upload Document
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

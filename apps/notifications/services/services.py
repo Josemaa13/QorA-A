@@ -2,7 +2,7 @@ from datetime import datetime
 from core.clients.mongodb_client import mongodb_client
 from bson import ObjectId
 from users.models import User
-from publications.models import Question
+from publications.models import Document
 
 COLLECTION = 'notifications'
 
@@ -33,22 +33,22 @@ def get_user_notifications(user_id, limit = 50):
         return []
 
     actor_ids = set()
-    question_ids = set()
+    document_ids = set()
     
     for n in raw_notifs:
         actor_ids.add(n.get('actor_id'))
-        if n.get('target_type') == 'Question':
-            question_ids.add(n.get('target_id'))
+        if n.get('target_type') == 'Document':
+            document_ids.add(n.get('target_id'))
             
     users = {u.id: u for u in User.objects.filter(id__in=actor_ids)}
-    questions = {q.id: q for q in Question.objects.filter(id__in=question_ids)}
+    documents = {d.id: d for d in Document.objects.filter(id__in=document_ids)}
 
     enriched_notifs = []
     for n in raw_notifs:
         n['id'] = str(n['_id'])
         n['actor'] = users.get(n['actor_id'])
-        if n.get('target_type') == 'Question':  
-            n['target'] = questions.get(n['target_id'])
+        if n.get('target_type') == 'Document':  
+            n['target'] = documents.get(n['target_id'])
         if n['actor']:
             enriched_notifs.append(n)
 

@@ -5,7 +5,7 @@
     
     <nav class="header-nav">
         {% if user.is_authenticated %}
-            <a href="{% url 'ask_question' %}" class="btn btn-primary">Ask Question</a>
+            <a href="{% url 'upload_document' %}" class="btn btn-primary">Upload Document</a>
             <a href="{% url 'profile' user.username %}" class="btn btn-outline">{{ user.username }}</a>
             
             <a href="{% url 'notifications_index' %}" class="btn btn-outline nav-icon-btn" title="Notifications">

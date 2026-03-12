@@ -37,17 +37,17 @@ def profile_view(request, username):
     followers_count = get_followers_count(profile_user.id)
     following_count = get_following_count(profile_user.id)
 
-    questions = profile_user.questions.all().order_by('-timestamp')
-    
-    for question in questions:
-        question.set_vote_status(request.user.id)
+    if request.user == profile_user:
+        documents = profile_user.documents.all().order_by('-timestamp')
+    else:
+        documents = profile_user.documents.filter(is_public=True).order_by('-timestamp')
     
     context = {
         'profile_user': profile_user,
         'is_following': is_following,
         'followers_count': followers_count,
         'following_count': following_count,
-        'questions': questions,
+        'documents': documents,
     }
 
     return render(request, 'users/profile.html', context)

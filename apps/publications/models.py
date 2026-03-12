@@ -1,9 +1,10 @@
+import os
 from django.db import models
 from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-
+from django.core.exceptions import ValidationError
 class Publication(models.Model):  
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name = "%(class)ss")
@@ -37,17 +38,16 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
     
-class Question(Publication):
-    
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.pdf', '.png', '.jpg', '.jpeg']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Unsupported file extension. Allowed extensions are: pdf, png, jpg, jpeg.')
+
+class Document(Publication):
     title = models.CharField(max_length = 255)
+    file = models.FileField(upload_to='documents/', validators=[validate_file_extension])
+    is_public = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title}, {self.id}"
-
-class Answer(Publication):
-
-    question = models.ForeignKey(Question, on_delete = models.CASCADE, related_name = 'answers')  
-
-    def __str__(self):
-        return f"Answer to {self.question.title}"
-

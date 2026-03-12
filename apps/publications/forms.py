@@ -1,35 +1,12 @@
 from django import forms
-from .models import Question, Answer, Topic
+from .models import Document
 
-class QuestionForm(forms.ModelForm):
-
-    topics = forms.ModelMultipleChoiceField(
-        queryset = Topic.objects.all(),
-        widget = forms.CheckboxSelectMultiple,
-        required = False,
-        help_text = "Select topics relevant to your question."
-    )
-
+class DocumentForm(forms.ModelForm):
     class Meta:
-        model = Question
-        fields = ['title', 'content', 'topics']
+        model = Document
+        fields = ['title', 'file', 'is_public']
         widgets = {
-            'title': forms.TextInput(attrs = {'class': 'form-control'}),
-            'content': forms.Textarea(attrs = {'class': 'form-control', 'rows': 5}),
-        }
-    
-
-class AnswerForm(forms.ModelForm):
-    class Meta:
-        model = Answer
-        fields = ['content']
-        widgets = {
-            'content': forms.Textarea(attrs={
-                'class': 'form-control', 
-                'rows': 3, 
-                'placeholder': 'Write your answer here...'
-            }),
-        }
-        labels = {
-            'content': ''
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'class': 'form-control', 'accept': '.pdf,.png,.jpg,.jpeg'}),
+            'is_public': forms.CheckboxInput(attrs={'class': 'form-check-input'})
         }

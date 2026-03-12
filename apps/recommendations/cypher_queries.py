@@ -9,12 +9,12 @@ RECOMMEND_USERS_QUERY = """
 """
 
 # Suggest topics related to topics I already follow
-# Logic: (Me) -> (MyTopic) <- (Question) -> (RecommendedTopic)
-# "People who asked about X also asked about Y" implies connection via Questions
+# Logic: (Me) -> (MyTopic) <- (Document) -> (RecommendedTopic)
+# "People who uploaded about X also uploaded about Y" implies connection via Documents
 RECOMMEND_TOPICS_QUERY = """
-    MATCH (user:User {id: $user_id})-[:INTERESTED_IN]->(my_topic:Topic)<-[:HAS_TOPIC]-(question:Question)-[:HAS_TOPIC]->(rec_topic:Topic)
+    MATCH (user:User {id: $user_id})-[:INTERESTED_IN]->(my_topic:Topic)<-[:HAS_TOPIC]-(document:Document)-[:HAS_TOPIC]->(rec_topic:Topic)
     WHERE NOT (user)-[:INTERESTED_IN]->(rec_topic) AND my_topic.id <> rec_topic.id
-    RETURN rec_topic.id AS id, count(question) AS strength
+    RETURN rec_topic.id AS id, count(document) AS strength
     ORDER BY strength DESC
     LIMIT 5
 """
