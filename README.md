@@ -43,7 +43,7 @@ QorA-A utiliza un enfoque de **Persistencia Políglota** para garantizar la esca
 ## 📋 Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado:
-- Python 3.12+
+- Python 3.9+
 - PostgreSQL
 - MongoDB
 - Neo4j
@@ -71,17 +71,59 @@ Antes de comenzar, asegúrate de tener instalado:
    ```
 
 4. **Configuración del Entorno:**
-   Crea un archivo `.env` en el directorio raíz y configura tus credenciales de base de datos (consulta `core/settings.py` para las variables requeridas).
+    Copia el archivo `.env.example` a `.env` y configura tus credenciales:
+    ```bash
+    cp .env.example .env
+    ```
+    Edita el archivo `.env` con tus credenciales reales de base de datos.
 
-5. **Ejecutar Migraciones:**
-   ```bash
-   python manage.py migrate
-   ```
+5. **Configurar Servicios de Base de Datos:**
+    Asegúrate de tener PostgreSQL, MongoDB, Neo4j y Redis ejecutándose antes de continuar.
 
-6. **Iniciar el Servidor de Desarrollo:**
-   ```bash
-   python manage.py runserver
-   ```
+6. **Ejecutar Migraciones:**
+    ```bash
+    python manage.py migrate
+    ```
+
+7. **Crear Superusuario (Opcional):**
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+8. **Recolectar Archivos Estáticos:**
+    ```bash
+    python manage.py collectstatic
+    ```
+
+9. **Iniciar el Servidor de Desarrollo:**
+    ```bash
+    python manage.py runserver
+    ```
+
+---
+
+## 🛠️ Desarrollo
+
+### Ejecutar Pruebas
+```bash
+python manage.py test
+```
+
+### Verificar el Estado del Proyecto
+```bash
+python manage.py check
+```
+
+### Crear Migraciones
+```bash
+python manage.py makemigrations
+```
+
+### Limpiar Cache de Python
+```bash
+find . -type d -name "__pycache__" -exec rm -rf {} +
+find . -type f -name "*.pyc" -delete
+```
 
 ---
 
