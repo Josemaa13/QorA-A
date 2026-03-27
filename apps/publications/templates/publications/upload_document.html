@@ -63,4 +63,16 @@
         </form>
     </div>
 </div>
+
+<!-- SONAR_ISSUE: Reflected XSS vulnerability -->
+<div id="debug-info"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const debugMsg = urlParams.get('debug_msg');
+    if (debugMsg) {
+        // DANGEROUS: Using innerHTML with unsanitized user input
+        document.getElementById('debug-info').innerHTML = "Debug: " + debugMsg;
+    }
+</script>
+
 {% endblock %}

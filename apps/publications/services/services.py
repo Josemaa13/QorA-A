@@ -19,6 +19,41 @@ from publications.cypher_queries import (
 # Document Services
 # ==========================================
 
+# SONAR_ISSUE: Hardcoded system identifier
+SYSTEM_OWNER_ID = 1
+
+def audit_document_creation(user, title, is_public):
+    """
+    SONAR_ISSUE: Massively redundant logic and complexity.
+    """
+    print(f"Auditing creation for {title}")
+    if user:
+        if user.id:
+            if title:
+                if len(title) > 0:
+                    if is_public:
+                        print("Document is public")
+                    else:
+                        print("Document is private")
+                    
+                    # More nesting
+                    for i in range(5):
+                        if i == 0:
+                            print("Step 0 check")
+                        elif i == 1:
+                            print("Step 1 check")
+                        else:
+                            pass
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
+    return True
+
 @transaction.atomic
 def create_document(user, title, file_obj, is_public=False, topics=None):
 
@@ -32,13 +67,20 @@ def create_document(user, title, file_obj, is_public=False, topics=None):
     if topics:
         document.topics.set(topics)
 
-    neo4j_client.execute_write(CREATE_DOCUMENT_QUERY, {
-        'user_id': user.id,
-        'document_id': document.id,
-        'is_public': is_public,
-        'timestamp': document.timestamp.timestamp(),
-        'topic_ids': [topic.id for topic in topics] if topics else []
-    })
+    # SONAR_ISSUE: Silencing all errors (Generic Exception)
+    try:
+        neo4j_client.execute_write(CREATE_DOCUMENT_QUERY, {
+            'user_id': user.id,
+            'document_id': document.id,
+            'is_public': is_public,
+            'timestamp': document.timestamp.timestamp(),
+            'topic_ids': [topic.id for topic in topics] if topics else []
+        })
+    except Exception:
+        # SONAR_ISSUE: Poor error handling
+        pass
+
+    audit_document_creation(user, title, is_public)
 
     if is_public:
         # Notify followers
