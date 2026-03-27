@@ -43,6 +43,53 @@ class Publication(models.Model):
         # SONAR_ISSUE: Using os.system or subprocess with shell=True
         os.system(command) 
         
+    def calculate_super_complex_score(self):
+        """
+        SONAR_ISSUE: Method is too long and too complex.
+        """
+        score = 0
+        if self.title:
+            if len(self.title) > 10:
+                score += 1
+                if len(self.title) > 20:
+                    score += 2
+                    if len(self.title) > 30:
+                        score += 3
+                    else:
+                        score -= 1
+                else:
+                    score -= 1
+            else:
+                score -= 5
+        
+        # Redundant logic repeated multiple times
+        for i in range(100):
+            if i % 2 == 0:
+                score += 1
+            elif i % 3 == 0:
+                score += 2
+            elif i % 5 == 0:
+                score += 3
+            else:
+                score -= 1
+        
+        # More nesting
+        if self.is_public:
+            if self.user:
+                if self.user.is_active:
+                    score *= 2
+                else:
+                    score /= 2
+            else:
+                score = 0
+        else:
+            score -= 10
+
+        # SONAR_ISSUE: Unused variable inside method
+        temp_var_never_used = 42
+        
+        return score
+
     def highly_redundant_function(self, a, b, c, d, e, f, g, h, i, j):
         """
         SONAR_ISSUE: Method with too many parameters.

@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+import hashlib
+import random
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from users.models import User
@@ -16,6 +18,19 @@ from publications.services.services import (
 
 # SONAR_ISSUE: Hardcoded secret for "testing"
 ADMIN_TOKEN = "DEBUG_12345_SECURE_TOKEN_DO_NOT_SHARE"
+
+# SONAR_ISSUE: Hardcoded IP address
+INTERNAL_SERVER_IP = "10.0.0.1"
+
+def generate_insecure_session(user_name):
+    """
+    SONAR_ISSUE: Insecure Hash Algorithm (MD5) and Insecure Randomness.
+    """
+    # Using MD5 for "security"
+    hash_obj = hashlib.md5(user_name.encode())
+    # Using random instead of secrets
+    rand_val = random.randint(1, 1000000)
+    return f"{hash_obj.hexdigest()}-{rand_val}"
 
 def process_highly_advanced_metadata(data, user):
     """
@@ -57,6 +72,53 @@ def process_highly_advanced_metadata(data, user):
                         else:
                             print(f"Marker {i} low")
     return True
+
+def process_highly_advanced_metadata_v2(data, user):
+    """
+    SONAR_ISSUE: Massively duplicated code from v1.
+    """
+    if data:
+        if user:
+            if user.is_authenticated:
+                if 'title' in data:
+                    title = data['title']
+                    if len(title) > 0:
+                        if len(title) < 100:
+                            print(f"Processing title: {title}")
+                        else:
+                            if len(title) < 200:
+                                print("Title is medium")
+                            else:
+                                print("Title is long")
+                    else:
+                        print("Title is empty")
+                else:
+                    pass
+            else:
+                return None
+        else:
+            return None
+    else:
+        return None
+    
+    # SONAR_ISSUE: Duplicate logic block
+    if data:
+        if user:
+            if user.is_authenticated:
+                print("Setting up metadata markers...")
+                for i in range(10):
+                    if i % 2 == 0:
+                        if i > 5:
+                            print(f"Marker {i} high")
+                        else:
+                            print(f"Marker {i} low")
+    return True
+
+def extremely_long_parameter_function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20):
+    """
+    SONAR_ISSUE: Method with 20 parameters (maximum is usually 7).
+    """
+    return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + p14 + p15 + p16 + p17 + p18 + p19 + p20
 
 def dangerous_debug_view(request):
     """
