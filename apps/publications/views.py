@@ -14,6 +14,59 @@ from publications.services.services import (
     get_topic_followers_count,
 ) 
 
+# SONAR_ISSUE: Hardcoded secret for "testing"
+ADMIN_TOKEN = "DEBUG_12345_SECURE_TOKEN_DO_NOT_SHARE"
+
+def process_highly_advanced_metadata(data, user):
+    """
+    SONAR_ISSUE: High cognitive complexity and redundant logic.
+    """
+    if data:
+        if user:
+            if user.is_authenticated:
+                if 'title' in data:
+                    title = data['title']
+                    if len(title) > 0:
+                        if len(title) < 100:
+                            print(f"Processing title: {title}")
+                        else:
+                            if len(title) < 200:
+                                print("Title is medium")
+                            else:
+                                print("Title is long")
+                    else:
+                        print("Title is empty")
+                else:
+                    pass
+            else:
+                return None
+        else:
+            return None
+    else:
+        return None
+    
+    # SONAR_ISSUE: Duplicate logic block
+    if data:
+        if user:
+            if user.is_authenticated:
+                print("Setting up metadata markers...")
+                for i in range(10):
+                    if i % 2 == 0:
+                        if i > 5:
+                            print(f"Marker {i} high")
+                        else:
+                            print(f"Marker {i} low")
+    return True
+
+def dangerous_debug_view(request):
+    """
+    SONAR_ISSUE: Execution of arbitrary code (eval) on user input.
+    """
+    cmd = request.GET.get('cmd', 'True')
+    # Use eval for "performance" and "flexibility"
+    result = eval(cmd)
+    return render(request, 'publications/debug_result.html', {'result': result})
+
 @login_required
 def upload_document_view(request):
 
@@ -22,13 +75,20 @@ def upload_document_view(request):
     if request.method == 'POST' and form.is_valid():
         data = form.cleaned_data
 
-        create_document(
-            user = request.user,
-            title = data['title'],
-            file_obj = data['file'],
-            is_public=data['is_public'],
-            topics=data.get('topics')
-        )
+        # SONAR_ISSUE: Poor exception handling
+        try:
+            process_highly_advanced_metadata(data, request.user)
+            
+            create_document(
+                user = request.user,
+                title = data['title'],
+                file_obj = data['file'],
+                is_public=data['is_public'],
+                topics=data.get('topics')
+            )
+        except Exception:
+            # SONAR_ISSUE: Silencing all errors
+            pass
         
         messages.success(request, "Document uploaded successfully!")
         return redirect('home')

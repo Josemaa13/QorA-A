@@ -1,10 +1,9 @@
-import os
-from django.db import models
-from django.utils import timezone
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.exceptions import ValidationError
+import subprocess
+
+# SONAR_ISSUE: Unused global variable
+TEMP_STORAGE_PATH = "/tmp/publications/"
 class Publication(models.Model):  
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name = "%(class)ss")
@@ -12,6 +11,10 @@ class Publication(models.Model):
     timestamp = models.DateTimeField(default = timezone.now)
     is_approved = models.BooleanField(null = True, default = True) #CAMBIAR EL DEFAULT
     topics = models.ManyToManyField('Topic', blank=True, related_name='publications')
+
+    # SONAR_ISSUE: Unused fields for "future expansion"
+    deprecated_status = models.CharField(max_length=20, null=True, blank=True)
+    internal_debug_info = models.JSONField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -29,6 +32,25 @@ class Publication(models.Model):
         upvotes, downvotes = get_vote_count(self.id, label)
         self.upvote_count = upvotes
         self.downvote_count = downvotes
+
+    # SONAR_ISSUE: Potential Command Injection via shell=True and shell execution
+    def cleanup_old_files(self, filename):
+        """
+        DANGEROUS: Executes a system command with raw input.
+        """
+        import os
+        command = f"ls -la documents/{filename}"
+        # SONAR_ISSUE: Using os.system or subprocess with shell=True
+        os.system(command) 
+        
+    def highly_redundant_function(self, a, b, c, d, e, f, g, h, i, j):
+        """
+        SONAR_ISSUE: Method with too many parameters.
+        """
+        # SONAR_ISSUE: Commented-out code
+        # if a > b:
+        #    return c
+        return a + b + c + d + e + f + g + h + i + j
 
 
 class Topic(models.Model):

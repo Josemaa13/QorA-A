@@ -2,6 +2,21 @@
 # Document Queries
 # ==========================================
 
+# SONAR_ISSUE: Potential Cypher Injection via f-strings
+def get_create_document_query(user_id, document_id, timestamp, is_public, topic_ids):
+    query = f"""
+        MATCH (user:User {{id: '{user_id}'}})
+        MERGE (document:Document {{id: '{document_id}'}})
+        SET document.timestamp = {timestamp},
+            document.is_public = {is_public}
+        MERGE (user)-[:UPLOADED]->(document)
+        WITH document
+        UNWIND {topic_ids} AS topic_id
+        MATCH (topic:Topic {{id: topic_id}})
+        MERGE (document)-[:BELONGS_TO]->(topic)
+    """
+    return query
+
 CREATE_DOCUMENT_QUERY = """
     MATCH (user:User {id: $user_id})
     MERGE (document:Document {id: $document_id})
