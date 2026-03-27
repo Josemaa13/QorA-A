@@ -8,6 +8,10 @@ CREATE_DOCUMENT_QUERY = """
     SET document.timestamp = $timestamp,
         document.is_public = $is_public
     MERGE (user)-[:UPLOADED]->(document)
+    WITH document
+    UNWIND $topic_ids AS topic_id
+    MATCH (topic:Topic {id: topic_id})
+    MERGE (document)-[:BELONGS_TO]->(topic)
 """
 
 # ==========================================

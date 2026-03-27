@@ -20,7 +20,7 @@ from publications.cypher_queries import (
 # ==========================================
 
 @transaction.atomic
-def create_document(user, title, file_obj, is_public=False):
+def create_document(user, title, file_obj, is_public=False, topics=None):
 
     document = Document.objects.create(
         user = user,
@@ -29,11 +29,15 @@ def create_document(user, title, file_obj, is_public=False):
         is_public=is_public
     )
 
+    if topics:
+        document.topics.set(topics)
+
     neo4j_client.execute_write(CREATE_DOCUMENT_QUERY, {
         'user_id': user.id,
         'document_id': document.id,
         'is_public': is_public,
-        'timestamp': document.timestamp.timestamp()
+        'timestamp': document.timestamp.timestamp(),
+        'topic_ids': [topic.id for topic in topics] if topics else []
     })
 
     if is_public:

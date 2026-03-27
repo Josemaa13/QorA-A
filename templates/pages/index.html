@@ -18,10 +18,10 @@
     </div>
 
     <!-- Right Column: Sidebar -->
-    {% if user.is_authenticated %}
     <aside class="sidebar-column">
         
         <!-- Recommendation Card: Users -->
+        {% if user.is_authenticated %}
         <div class="card">
             <h3 class="sidebar-card-header">Who to Follow</h3>
             
@@ -54,6 +54,7 @@
                 <p class="text-muted text-center">No new users to recommend.</p>
             {% endif %}
         </div>
+        {% endif %}
 
         <!-- Recommendation Card: Topics -->
         <div class="card">
@@ -69,6 +70,7 @@
                             </a>
                         </div>
                         
+                        {% if user.is_authenticated %}
                         <button 
                             class="btn btn-sm btn-outline js-follow-btn" 
                             data-action="follow"
@@ -76,6 +78,7 @@
                             data-unfollow-url="{% url 'unfollow_topic' topic.id %}">
                             Follow
                         </button>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
@@ -85,6 +88,5 @@
         </div>
 
     </aside>
-    {% endif %}
 </div>
 {% endblock %}

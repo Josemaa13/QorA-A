@@ -18,6 +18,16 @@
                     {% else %}
                     <span class="badge" style="background: #999; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-left: 0.5rem;">Private</span>
                     {% endif %}
+
+                    {% if document.topics.all %}
+                    <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                        {% for topic in document.topics.all %}
+                        <a href="{% url 'topic_detail' topic.id %}" style="background-color: #e0f2fe; color: #0284c7; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.9em; font-weight: 500; text-decoration: none; border: 1px solid #bae6fd; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#bae6fd'" onmouseout="this.style.backgroundColor='#e0f2fe'">
+                            {{ topic.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="document-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">

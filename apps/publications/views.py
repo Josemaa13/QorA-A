@@ -26,7 +26,8 @@ def upload_document_view(request):
             user = request.user,
             title = data['title'],
             file_obj = data['file'],
-            is_public=data['is_public']
+            is_public=data['is_public'],
+            topics=data.get('topics')
         )
         
         messages.success(request, "Document uploaded successfully!")
@@ -37,7 +38,7 @@ def upload_document_view(request):
 def topic_detail_view(request, topic_id):
     user_id = request.user.id if request.user.is_authenticated else None
     topic = get_object_or_404(Topic, id = topic_id)
-    documents = [] 
+    documents = Document.objects.filter(topics=topic).order_by('-timestamp')
 
     is_following = (
         request.user.is_authenticated 

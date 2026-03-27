@@ -11,6 +11,7 @@ QorA-A es una plataforma moderna de red social y publicaciones de alto rendimien
 ### 📝 Publicaciones
 - **Creación de Contenido**: Publicación de contenido enriquecido con soporte para archivos multimedia.
 - **Gestión de Multimedia**: Manejo eficiente de documentos e imágenes subidos por los usuarios.
+- **Gestión de Temas**: Sistema de categorización de contenido mediante temas, permitiendo a los administradores gestionar temas y a los usuarios asignarlos a documentos.
 
 ### 🤖 Recomendaciones
 - **Motor Basado en Grafos**: Utiliza Neo4j para proporcionar sugerencias de alta relevancia para usuarios y contenido, basadas en la topología de la red y los intereses comunes.
