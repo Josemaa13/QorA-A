@@ -56,6 +56,25 @@
         </div>
         {% endif %}
 
+        <!-- All Users Discovery Sidebar -->
+        <div class="card">
+            <h3 class="sidebar-card-header">Discover Users</h3>
+            <div class="rec-list">
+                {% for other_user in all_users %}
+                <div class="rec-item">
+                    <div class="rec-info">
+                        <a href="{% url 'profile' other_user.username %}" class="rec-username">
+                            @{{ other_user.username }}
+                        </a>
+                        <span class="rec-meta">View profile</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center">No other users found.</p>
+                {% endfor %}
+            </div>
+        </div>
+
         <!-- Recommendation Card: Topics -->
         <div class="card">
             <h3 class="sidebar-card-header">Topics for You</h3>

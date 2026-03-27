@@ -12,6 +12,11 @@ from users.services.services import (
     get_followers_count,
     get_following_count,
 )
+from users.services.rating_services import (
+    rate_user,
+    get_average_rating,
+    get_total_ratings_count,
+)
 
 def register_view(request):
     if request.method == 'POST':
@@ -42,12 +47,18 @@ def profile_view(request, username):
     else:
         documents = profile_user.documents.filter(is_public=True).order_by('-timestamp')
     
+    # SONAR_ISSUE: Fetching rating data twice (Poor Performance)
+    avg_rating = get_average_rating(profile_user.id)
+    total_ratings = get_total_ratings_count(profile_user.id)
+    
     context = {
         'profile_user': profile_user,
         'is_following': is_following,
         'followers_count': followers_count,
         'following_count': following_count,
         'documents': documents,
+        'avg_rating': avg_rating,
+        'total_ratings': total_ratings,
     }
 
     return render(request, 'users/profile.html', context)
@@ -62,4 +73,14 @@ def follow_user_view(request, target_id):
 @require_POST
 def unfollow_user_view(request, target_id):
     unfollow_user(request.user.id, target_id)
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+@login_required
+@require_POST
+def rate_user_view(request, target_id):
+    """
+    SONAR_ISSUE: No validation on score range in the view layer (redundant but missing here)
+    """
+    score = int(request.POST.get('score', 1))
+    rate_user(request.user.id, target_id, score)
+    messages.success(request, f"Rated {User.objects.get(id=target_id).username} with {score} stars!")
     return redirect(request.META.get('HTTP_REFERER', 'home'))
