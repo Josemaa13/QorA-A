@@ -46,6 +46,17 @@
                 <small class="text-muted" style="display:block; margin-top:0.25rem;">Public documents will appear in your followers' feeds.</small>
             </div>
 
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="{{ form.topics.id_for_label }}" class="form-label">Topics (optional)</label>
+                {{ form.topics }}
+                {% if form.topics.errors %}
+                    <div class="form-error-msg">
+                        {{ form.topics.errors }}
+                    </div>
+                {% endif %}
+                <small class="text-muted" style="display:block; margin-top:0.25rem;">Select topics to categorize your document.</small>
+            </div>
+
             <button type="submit" class="btn btn-primary btn-block">
                 Upload Document
             </button>

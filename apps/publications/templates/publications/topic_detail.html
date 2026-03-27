@@ -10,11 +10,11 @@
     <!-- Left Column: Questions Feed -->
     <div class="main-column">
         <div class="page-header">
-            <h1>Questions related to {{ topic.name }}</h1>
+            <h1>Documents related to {{ topic.name }}</h1>
         </div>
         
         <!-- Reuse the standard list -->
-        {% include 'publications/questions_list.html' with questions=questions empty_message="No questions found for this topic yet." %}
+        {% include 'publications/documents_list.html' with documents=documents empty_message="No documents found for this topic yet." %}
     </div>
 
     <!-- Right Column: Topic Info Sidebar -->

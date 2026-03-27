@@ -11,6 +11,7 @@ class Publication(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(default = timezone.now)
     is_approved = models.BooleanField(null = True, default = True) #CAMBIAR EL DEFAULT
+    topics = models.ManyToManyField('Topic', blank=True, related_name='publications')
 
     class Meta:
         abstract = True

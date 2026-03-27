@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from publications.models import Document
+from publications.models import Document, Topic
 from publications.services.services import get_user_feed
 from recommendations.services.services import get_user_recommendations, get_topic_recommendations
 
@@ -8,6 +8,8 @@ def home(request):
         documents = list(get_user_feed(request.user.id))
         recommended_users = get_user_recommendations(request.user.id)
         recommended_topics = get_topic_recommendations(request.user.id)
+        if not recommended_topics:
+            recommended_topics = list(Topic.objects.all().order_by('-id')[:5])
                 
         context = {
             'documents': documents,
@@ -17,10 +19,12 @@ def home(request):
         }
     else:
         documents = list(Document.objects.filter(is_public=True).order_by('-timestamp')[:20])
+        recommended_topics = list(Topic.objects.all().order_by('-id')[:5])
             
         context = {
             'documents': documents,
-            'page_title': 'Latest Public Documents'
+            'page_title': 'Latest Public Documents',
+            'recommended_topics': recommended_topics
         }
         
     return render(request, 'pages/index.html', context)
