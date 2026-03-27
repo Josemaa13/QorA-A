@@ -32,14 +32,13 @@
             {% endif %}
 
             <!-- Stats -->
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <span class="stat-value">{{ followers_count }}</span>
-                    <span class="stat-label">Followers</span>
-                </div>
                 <div class="stat-item">
                     <span class="stat-value">{{ following_count }}</span>
                     <span class="stat-label">Following</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ avg_rating|default:"0.0" }}</span>
+                    <span class="stat-label">Rating ({{ total_ratings }})</span>
                 </div>
             </div>
 
@@ -49,7 +48,17 @@
 
             <!-- Action Buttons -->
             {% if user.is_authenticated and user != profile_user %}
-                <div>
+                <div style="margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem;">
+                    <p style="font-weight: bold; margin-bottom: 0.5rem;">Rate this user:</p>
+                    <form action="{% url 'rate_user' profile_user.id %}" method="POST" style="display: flex; gap: 0.25rem; margin-bottom: 1rem;">
+                        {% csrf_token %}
+                        {% for i in "12345"|make_list %}
+                            <button name="score" value="{{ i }}" type="submit" class="btn btn-sm btn-outline" style="min-width: 32px;">
+                                {{ i }}
+                            </button>
+                        {% endfor %}
+                    </form>
+                    
                     {% if is_following %}
                         <button 
                             class="btn btn-outline btn-block js-follow-btn" 
