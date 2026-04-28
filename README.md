@@ -105,6 +105,16 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ## 🛠️ Desarrollo
 
+### Cargar datos demo para OpenMetadata
+Si necesitas poblar PostgreSQL y MongoDB rápidamente para prácticas de catálogo:
+
+```bash
+docker exec -i postgres_db psql -U postgres -d qora_db < scripts/seed_postgres.sql
+docker exec -i mongodb mongosh "mongodb://mongodb_user:mongodb_password@localhost:27017/admin?authSource=admin" < scripts/seed_mongo.js
+```
+
+Estos scripts son idempotentes para uso en entorno local de desarrollo.
+
 ### Ejecutar Pruebas
 ```bash
 python manage.py test
